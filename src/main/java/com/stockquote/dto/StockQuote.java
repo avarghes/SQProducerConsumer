@@ -3,6 +3,7 @@ package com.stockquote.dto;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class StockQuote {
 	private String ticker;
@@ -63,6 +64,11 @@ public class StockQuote {
 
 	public void setTradingDay(Date tradingDay) {
 		this.tradingDay = tradingDay;
+	}
+	
+	@JsonIgnore
+	public boolean isEmpty(){
+		return this.ticker == null ? true : false;
 	}
 
 }
