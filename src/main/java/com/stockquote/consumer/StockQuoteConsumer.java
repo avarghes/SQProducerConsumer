@@ -3,6 +3,8 @@ package com.stockquote.consumer;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,8 +19,9 @@ import com.stockquote.common.Utility;
 import com.stockquote.dto.StockQuote;
 import com.stockquote.entities.StockQuoteEntity;
 
-@Lazy
+//@Lazy
 @Component
+@State(Scope.Benchmark)
 public class StockQuoteConsumer {
 
 	private AtomicInteger count = new AtomicInteger();
@@ -54,5 +57,4 @@ public class StockQuoteConsumer {
 			System.err.println("Unknown Error !!! " + exe.getMessage());
 		}
 	}
-
 }

@@ -1,11 +1,14 @@
 package com.stockquote.config;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
+import org.springframework.data.cassandra.config.CassandraEntityClassScanner;
 import org.springframework.data.cassandra.core.mapping.BasicCassandraMappingContext;
 import org.springframework.data.cassandra.core.mapping.CassandraMappingContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
@@ -24,6 +27,11 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 	
 	@Value("${cassandra.server.port}")
 	private String port;
+	
+	@Value("${cassandra.baseentity.package}")
+	private String basePackage;
+	
+	
 	
 	@Override
 	protected String getKeyspaceName() {
@@ -47,7 +55,18 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 	
 	@Bean
 	public CassandraMappingContext cassandraMapping(){
-		return new BasicCassandraMappingContext();
+		CassandraMappingContext mappingContext = new CassandraMappingContext();
+		return mappingContext;
+	}
+	
+	@Override
+	public String[] getEntityBasePackages() {
+	    return new String[]{basePackage};
+	}
+
+	@Override
+	protected Set<Class<?>> getInitialEntitySet() throws ClassNotFoundException {
+	    return CassandraEntityClassScanner.scan(getEntityBasePackages());
 	}
 
 }

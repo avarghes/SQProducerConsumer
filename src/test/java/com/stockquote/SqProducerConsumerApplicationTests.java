@@ -3,12 +3,12 @@ package com.stockquote;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.openjdk.jmh.annotations.TearDown;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.support.SendResult;
-import org.springframework.util.Assert;
 import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.util.concurrent.ListenableFuture;
 
@@ -23,7 +23,7 @@ import com.stockquote.producer.StockQuoteProducer;
 class SqProducerConsumerApplicationTests {
 
 	@Autowired
-	private ApplicationContext context;
+	private AnnotationConfigApplicationContext context;
 
 	@Autowired
 	private Environment env;
@@ -58,7 +58,7 @@ class SqProducerConsumerApplicationTests {
 
 	}
 
-	@Test()
+	@Test  
 	public void when_producer_writes_empty_msg_to_topic() {
 		StockQuoteProducer producer = context.getBean(StockQuoteProducer.class);
 
@@ -80,4 +80,8 @@ class SqProducerConsumerApplicationTests {
 		Thread.sleep(5000);
 	}
 
+	@TearDown
+	public void tearDown(){
+		this.context.close();
+	}
 }
